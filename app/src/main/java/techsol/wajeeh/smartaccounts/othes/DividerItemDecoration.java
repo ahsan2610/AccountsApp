@@ -1,4 +1,4 @@
-package techsol.wajeeh.smartaccounts.models;
+package techsol.wajeeh.smartaccounts.othes;
 
 import android.content.Context;
 import android.content.res.TypedArray;

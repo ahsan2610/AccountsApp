@@ -1,15 +1,15 @@
-package techsol.wajeeh.smartaccounts;
+package techsol.wajeeh.smartaccounts.gui;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,19 +17,19 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import android.support.v7.widget.Toolbar;
+
 import java.util.ArrayList;
 import java.util.List;
 
+import techsol.wajeeh.smartaccounts.R;
 import techsol.wajeeh.smartaccounts.database.acount;
-import techsol.wajeeh.smartaccounts.login.Login;
-import techsol.wajeeh.smartaccounts.login.Registration;
-import techsol.wajeeh.smartaccounts.models.DividerItemDecoration;
-import techsol.wajeeh.smartaccounts.models.class_accDetail;
+import techsol.wajeeh.smartaccounts.othes.DividerItemDecoration;
 import techsol.wajeeh.smartaccounts.models.class_account;
+import techsol.wajeeh.smartaccounts.models.class_transaction;
 
 
-
-public class MainActivity extends Activity {
+public class MainActivity extends AppCompatActivity {
 
 
 	Context context;
@@ -39,6 +39,22 @@ public class MainActivity extends Activity {
 	TextView  tv_pay ;
 	TextView  tv_exp ;
 	TextView  tv_cb ;
+
+
+
+
+
+	String account_id;
+	String pName;
+	String current_ballence;
+
+
+	long todayExpense;
+	long todayPay;
+	long todayRecieve;
+
+	List<class_transaction> transactionList = new ArrayList<class_transaction>();
+
 	List<class_account> accList = new ArrayList<class_account>();
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +63,12 @@ public class MainActivity extends Activity {
 
 		context = this;
 
-       Intent i = getIntent();
-       String id = i.getStringExtra("AccID");
-		Toast.makeText(this, ""+id, Toast.LENGTH_SHORT).show();
+		Intent i = getIntent();
+		account_id = i.getStringExtra("account_id");
+		db=new acount(this);
+
+
+		Toast.makeText(this, ""+account_id, Toast.LENGTH_SHORT).show();
 
 
 		tv_rec  = findViewById(R.id.tv_rec);
@@ -58,35 +77,77 @@ public class MainActivity extends Activity {
 		tv_cb  = findViewById(R.id.tv_cb);
 
 
-		db=new acount(this);
-            Cursor cursor = db.DetailOF(id);
-		if (cursor != null )
-			if(cursor.getCount()!= 0)
-			{
-				Toast.makeText(context, "found ", Toast.LENGTH_SHORT).show();
+
+
+		Toolbar toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+		this.setTitle("main");
 
 
 
-				String detail_id              = cursor.getString(0);
-				String acc_id                 = cursor.getString(1);
-				String current_ballence       = cursor.getString(2);
-				String today_expense          = cursor.getString(3);
-				String today_paying           = cursor.getString(4);
-				String today_recieving        = cursor.getString(5);
-
-
-				tv_rec.setText("today_recieving" +  today_recieving);
-				tv_exp.setText("today_expense" +  today_expense);
-				tv_cb.setText("current_ballence" +  current_ballence);
-				tv_pay.setText("today_paying" +  today_paying);
 
 
 
-				//class_accDetail c  = new class_accDetail( detail_id ,acc_id,current_ballence,today_expense,today_paying,today_recieving);
 
-			}else
-				Toast.makeText(context, "0 record ", Toast.LENGTH_SHORT).show();
+		transactionList = db.Today_Transaction_Detail_OF_Account(account_id);
+		for(class_transaction t :transactionList ){
 
+			if (t.getType().equals("pay")) {
+				todayPay      =     todayPay + Long.parseLong(t.getAmount());
+			} else if (t.getType().equals("Expense")) {
+				todayExpense  = todayExpense + Long.parseLong(t.getAmount());
+			} else if (t.getType().equals("Recieve")){
+				todayRecieve  = todayRecieve + Long.parseLong(t.getAmount());
+			}
+
+		}
+
+
+
+
+
+		    tv_rec.setText(""+todayRecieve);
+		 	tv_exp.setText(""+todayExpense);
+		    tv_pay.setText(""+todayPay);
+
+		//class_accDetail c  = new class_accDetail( detail_id ,acc_id,current_ballence,today_expense,today_paying,today_recieving);
+
+
+		Button btTntr = findViewById(R.id.btnTrans);
+		btTntr.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+
+				if (TextUtils.isEmpty(account_id))
+				{
+					Toast.makeText(context, "account id empty", Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+				if (TextUtils.isEmpty(pName))
+				{
+					Toast.makeText(context, "pName empty", Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+				if (TextUtils.isEmpty(current_ballence))
+				{
+					Toast.makeText(context, "current_ballence empty", Toast.LENGTH_SHORT).show();
+					return;
+				}
+
+
+ ///        ye 3 he chaiye
+				Intent i = new Intent(context,newTransation.class);
+				i.putExtra("account_id",account_id);
+				i.putExtra("pName",pName);
+				i.putExtra("current_ballence",current_ballence);
+
+
+				startActivity(i);
+			}
+		});
 
 
 
@@ -113,7 +174,23 @@ public class MainActivity extends Activity {
 		}
 
 
-	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	} // on create
 
 
 
@@ -179,7 +256,18 @@ public class MainActivity extends Activity {
 						// onStickerSelected(getItem(pos));
 
 						class_account c = getItem(pos);
-						Toast.makeText(MainActivity.this, ""+c.getAccount_id(), Toast.LENGTH_SHORT).show();
+
+						Intent i = new Intent(context,acc_detail.class);
+						i.putExtra("account_id",c.getAccount_id());
+						i.putExtra("pName",c.getpName());
+						i.putExtra("current_ballence",c.getCurrent_ballence());
+
+
+
+
+
+
+						startActivity(i);
 
 						//  ((StickerSelectActivity)getActivity()).onStickerSelected(c.getd());;
 					}
@@ -190,17 +278,10 @@ public class MainActivity extends Activity {
 
 
 
-										itemView.setOnClickListener(new View.OnClickListener() {
+				itemView.setOnClickListener(new View.OnClickListener() {
 					@Override
 					public void onClick(View view) {
-						int pos = getAdapterPosition();
-						if (pos >= 0) { // might be NO_POSITION
-							// onStickerSelected(getItem(pos));
 
-							class_account c = getItem(pos);
-
-							//  ((StickerSelectActivity)getActivity()).onStickerSelected(c.getd());;
-						}
 					}
 				});
 
@@ -210,10 +291,31 @@ public class MainActivity extends Activity {
 	}
 
 
+	@Override
+	protected void onResume() {
+		super.onResume();
+		get_and_set_detail_of_id(account_id);
+
+	}
 
 
+	//-----------------------------------------------------------------------------------------------
 
 
+	void get_and_set_detail_of_id(String account_id){
+		Cursor cursor = db.Account_Detail_OF(account_id);
+		if (cursor != null )
+			if(cursor.getCount()!= 0) {
+				Toast.makeText(context, "found ", Toast.LENGTH_SHORT).show();
 
+
+				pName = cursor.getString(1);
+				current_ballence = cursor.getString(3);
+				tv_cb.setText(current_ballence);
+
+			}
+
+	}
+	//------------------------------------------------------------------------------------------------
 
 }

@@ -12,11 +12,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import techsol.wajeeh.smartaccounts.MainActivity;
+import techsol.wajeeh.smartaccounts.gui.MainActivity;
 import techsol.wajeeh.smartaccounts.R;
 import techsol.wajeeh.smartaccounts.database.acount;
-import techsol.wajeeh.smartaccounts.models.class_accDetail;
-import techsol.wajeeh.smartaccounts.models.class_account;
 
 public class Login extends AppCompatActivity {
 
@@ -51,7 +49,7 @@ Button loginBtn;
         password = findViewById(R.id.password);
 
 
-    loginBtn = findViewById(R.id.loginBtn);
+        loginBtn = findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
         @Override
         public void onClick(View v) {
@@ -59,20 +57,37 @@ Button loginBtn;
             n=   Name.getText().toString();
             p=   password.getText().toString();
 
-            Cursor cursor =  db.accountOF( n, p);
+            Cursor cursor =  db.Check_account_of_user( n, p);
             if (cursor != null )
                 if(cursor.getCount()!= 0)
             {
-                String account_id = cursor.getString(0);
-                String pName = cursor.getString(1);
-                String password = cursor.getString(2);
+
+                String account_id             = cursor.getString(0);
 
                 Intent i = new Intent(context,MainActivity.class);
-                i.putExtra("AccID",account_id);
+                i.putExtra("account_id",account_id);
+
                 startActivity(i);
+
 
             }else
                 Toast.makeText(context, "0 record ", Toast.LENGTH_SHORT).show();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
         }

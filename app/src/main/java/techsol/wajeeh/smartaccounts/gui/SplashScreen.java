@@ -1,4 +1,4 @@
-package techsol.wajeeh.smartaccounts;
+package techsol.wajeeh.smartaccounts.gui;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,6 +10,7 @@ import android.os.Handler;
 import java.util.ArrayList;
 import java.util.List;
 
+import techsol.wajeeh.smartaccounts.R;
 import techsol.wajeeh.smartaccounts.database.acount;
 import techsol.wajeeh.smartaccounts.login.Login;
 import techsol.wajeeh.smartaccounts.login.Registration;

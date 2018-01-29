@@ -76,9 +76,9 @@
         </android.support.design.widget.TextInputLayout>
 
         <Button
-            android:textColor="@color/colorPrimaryDark"
+            android:theme="@style/MyButton"
             android:id="@+id/loginBtn"
-            style="?android:textAppearanceSmall"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -97,7 +97,7 @@
         android:textAlignment="center"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Register"
+        android:text="Create an account"
         />
 
 
