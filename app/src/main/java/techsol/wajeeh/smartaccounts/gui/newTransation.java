@@ -34,7 +34,7 @@ public class newTransation extends AppCompatActivity {
 
 
     String account_id;
-
+    String  admin_id;
 
     String pName;
     String current_ballence;
@@ -190,7 +190,7 @@ public class newTransation extends AppCompatActivity {
 
 
 
-                class_transaction t = new class_transaction("1",account_id, description, type, amount, String.valueOf(tempNewBallence),String.valueOf(tempOldBallnece),String.valueOf(d));
+                class_transaction t = new class_transaction("1",account_id, admin_id, description, type, amount, String.valueOf(tempNewBallence),String.valueOf(tempOldBallnece),String.valueOf(d));
                 Toast.makeText(newTransation.this, "going to add", Toast.LENGTH_SHORT).show();
                Long id =  db.add_new_transacttion(t);
                 if (id < 0)
@@ -199,9 +199,6 @@ public class newTransation extends AppCompatActivity {
                     Toast.makeText(context, "ok add", Toast.LENGTH_SHORT).show();
 
 
-                    db.updateAcount_ballence(account_id, String.valueOf(tempNewBallence));
-                    current_ballence = String.valueOf(tempNewBallence);
-                    Toast.makeText(context, "new ballence"  +  current_ballence, Toast.LENGTH_SHORT).show();
 
                 }
 

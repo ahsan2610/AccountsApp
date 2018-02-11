@@ -44,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-	String account_id;
+	String admin_id;
 	String pName;
 	String current_ballence;
 
@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 	List<class_transaction> transactionList = new ArrayList<class_transaction>();
 
 	List<class_account> accList = new ArrayList<class_account>();
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);		
@@ -64,11 +65,11 @@ public class MainActivity extends AppCompatActivity {
 		context = this;
 
 		Intent i = getIntent();
-		account_id = i.getStringExtra("account_id");
+		admin_id = i.getStringExtra("admin_id");
 		db=new acount(this);
 
 
-		Toast.makeText(this, ""+account_id, Toast.LENGTH_SHORT).show();
+		Toast.makeText(this, ""+admin_id, Toast.LENGTH_SHORT).show();
 
 
 		tv_rec  = findViewById(R.id.tv_rec);
@@ -81,69 +82,33 @@ public class MainActivity extends AppCompatActivity {
 
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
-		this.setTitle("main");
+
+		db = new acount(context);
+		SQLiteDatabase database1 = db.getWritableDatabase();
 
 
 
 
 
-
-
-		transactionList = db.Today_Transaction_Detail_OF_Account(account_id);
-		for(class_transaction t :transactionList ){
-
-			if (t.getType().equals("pay")) {
-				todayPay      =     todayPay + Long.parseLong(t.getAmount());
-			} else if (t.getType().equals("Expense")) {
-				todayExpense  = todayExpense + Long.parseLong(t.getAmount());
-			} else if (t.getType().equals("Recieve")){
-				todayRecieve  = todayRecieve + Long.parseLong(t.getAmount());
-			}
-
-		}
-
-
-
-
-
-		    tv_rec.setText(""+todayRecieve);
-		 	tv_exp.setText(""+todayExpense);
-		    tv_pay.setText(""+todayPay);
 
 		//class_accDetail c  = new class_accDetail( detail_id ,acc_id,current_ballence,today_expense,today_paying,today_recieving);
 
 
-		Button btTntr = findViewById(R.id.btnTrans);
-		btTntr.setOnClickListener(new View.OnClickListener() {
+		Button btnNewAcc = findViewById(R.id.btnNewAcc);
+		btnNewAcc.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 
 
-				if (TextUtils.isEmpty(account_id))
+				if (TextUtils.isEmpty(admin_id))
 				{
 					Toast.makeText(context, "account id empty", Toast.LENGTH_SHORT).show();
 					return;
 				}
 
-				if (TextUtils.isEmpty(pName))
-				{
-					Toast.makeText(context, "pName empty", Toast.LENGTH_SHORT).show();
-					return;
-				}
 
-				if (TextUtils.isEmpty(current_ballence))
-				{
-					Toast.makeText(context, "current_ballence empty", Toast.LENGTH_SHORT).show();
-					return;
-				}
-
-
- ///        ye 3 he chaiye
-				Intent i = new Intent(context,newTransation.class);
-				i.putExtra("account_id",account_id);
-				i.putExtra("pName",pName);
-				i.putExtra("current_ballence",current_ballence);
-
+				Intent i = new Intent(context,add_new_account.class);
+				i.putExtra("admin_id",admin_id);
 
 				startActivity(i);
 			}
@@ -158,37 +123,15 @@ public class MainActivity extends AppCompatActivity {
 		recyclerView.setDrawingCacheEnabled(true);
 		recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
 		recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-		 adapter  = new AccountsAdapter(context);
+		adapter  = new AccountsAdapter(context);
 		recyclerView.setAdapter(adapter);
 
 
-		acount db = new acount(context);
-		SQLiteDatabase database1 = db.getWritableDatabase();
-		accList = db.getAllaccounts();
-		if (accList.isEmpty()){
-		}
-		else {
-
-			adapter.notifyDataSetChanged();
-
-		}
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+		get_and_set_detail_of_id(admin_id);
 
 	} // on create
 
@@ -221,8 +164,8 @@ public class MainActivity extends AppCompatActivity {
 
 			class_account i = accList.get(position);
 
-			holder.name.setText(i.getpName());
-			holder.id.setText(i.getAccount_id());
+			holder.name.setText(i.getName());
+			holder.id.setText(i.get_id());
 
 		}
 
@@ -255,16 +198,18 @@ public class MainActivity extends AppCompatActivity {
 					if (pos >= 0) { // might be NO_POSITION
 						// onStickerSelected(getItem(pos));
 
-						class_account c = getItem(pos);
+						class_account a = getItem(pos);
 
 						Intent i = new Intent(context,acc_detail.class);
-						i.putExtra("account_id",c.getAccount_id());
-						i.putExtra("pName",c.getpName());
-						i.putExtra("current_ballence",c.getCurrent_ballence());
 
 
-
-
+						i.putExtra("account_id",    a.get_id());
+						i.putExtra("admin_id",      a.getAdmin_id());
+						i.putExtra("name",          a.getName());
+						i.putExtra("phone",         a.getPhone());
+						i.putExtra("pay_able",      a.getPay_able());
+						i.putExtra("rec_able",      a.getRec_able());
+						i.putExtra("current_ballence",current_ballence);
 
 
 						startActivity(i);
@@ -294,7 +239,8 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-		get_and_set_detail_of_id(account_id);
+		get_and_set_detail_of_id(admin_id);
+
 
 	}
 
@@ -302,18 +248,61 @@ public class MainActivity extends AppCompatActivity {
 	//-----------------------------------------------------------------------------------------------
 
 
-	void get_and_set_detail_of_id(String account_id){
-		Cursor cursor = db.Account_Detail_OF(account_id);
+	void get_and_set_detail_of_id(String admin_id)
+
+	{
+		Cursor cursor = db.Admin_Detail_OF(admin_id);
 		if (cursor != null )
 			if(cursor.getCount()!= 0) {
 				Toast.makeText(context, "found ", Toast.LENGTH_SHORT).show();
 
-
 				pName = cursor.getString(1);
 				current_ballence = cursor.getString(3);
+				this.setTitle("Admin: "+pName);
 				tv_cb.setText(current_ballence);
 
 			}
+
+
+
+
+
+		transactionList = db.Today_Transaction_Detail_OF_Admin(admin_id);
+		for(class_transaction t :transactionList ){
+
+			if (t.getType().equals("pay")) {
+				todayPay      =     todayPay + Long.parseLong(t.getAmount());
+			} else if (t.getType().equals("Expense")) {
+				todayExpense  = todayExpense + Long.parseLong(t.getAmount());
+			} else if (t.getType().equals("Recieve")){
+				todayRecieve  = todayRecieve + Long.parseLong(t.getAmount());
+			}
+
+		}
+
+
+		tv_rec.setText(""+todayRecieve);
+		tv_exp.setText(""+todayExpense);
+		tv_pay.setText(""+todayPay);
+
+
+
+
+		accList = db.getAllaccounts_of_admin(admin_id);
+		if (accList.isEmpty()){
+		}
+		else {
+
+			adapter.notifyDataSetChanged();
+
+		}
+
+
+
+
+
+
+
 
 	}
 	//------------------------------------------------------------------------------------------------

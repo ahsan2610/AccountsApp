@@ -49,6 +49,9 @@ Button loginBtn;
         password = findViewById(R.id.password);
 
 
+        Name.setText("wajeeh");
+        password.setText("123456");
+
         loginBtn = findViewById(R.id.loginBtn);
         loginBtn.setOnClickListener(new View.OnClickListener() {
         @Override
@@ -57,15 +60,19 @@ Button loginBtn;
             n=   Name.getText().toString();
             p=   password.getText().toString();
 
-            Cursor cursor =  db.Check_account_of_user( n, p);
+
+
+
+
+            Cursor cursor =  db.Check_admin( n, p);
             if (cursor != null )
                 if(cursor.getCount()!= 0)
             {
 
-                String account_id             = cursor.getString(0);
+                String admin_id             = cursor.getString(0);
 
                 Intent i = new Intent(context,MainActivity.class);
-                i.putExtra("account_id",account_id);
+                i.putExtra("admin_id",admin_id);
 
                 startActivity(i);
 

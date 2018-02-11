@@ -124,11 +124,11 @@
 
 
         <Button
-            android:id="@+id/btnTrans"
+            android:id="@+id/btnNewAcc"
             android:layout_width="wrap_content"
             android:layout_height="45dp"
             android:layout_gravity="end"
-            android:text="new trasaction"
+            android:text="    new Account   "
             android:theme="@style/MyButton" />
 
 

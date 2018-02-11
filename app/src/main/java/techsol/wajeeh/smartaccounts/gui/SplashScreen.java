@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,14 +15,15 @@ import techsol.wajeeh.smartaccounts.R;
 import techsol.wajeeh.smartaccounts.database.acount;
 import techsol.wajeeh.smartaccounts.login.Login;
 import techsol.wajeeh.smartaccounts.login.Registration;
+import techsol.wajeeh.smartaccounts.models.admin;
 import techsol.wajeeh.smartaccounts.models.class_account;
 
-public class SplashScreen extends Activity {
+public class SplashScreen extends AppCompatActivity {
 
 	// Splash screen timer
-	private static int SPLASH_TIME_OUT = 1000;
+	private static int SPLASH_TIME_OUT = 3000;
 	private String userid;
-	List<class_account> accList = new ArrayList<class_account>();
+	List<admin> accList = new ArrayList<admin>();
 	Context context;
 
 	@Override
@@ -44,7 +46,7 @@ public class SplashScreen extends Activity {
 				// Start your app main activity
 				acount db = new acount(context);
 				SQLiteDatabase database1 = db.getWritableDatabase();
-				accList = db.getAllaccounts();
+				accList = db.getAlladmis();
 				if (accList.isEmpty()){
 
 					Intent i = new Intent(context , Registration.class);

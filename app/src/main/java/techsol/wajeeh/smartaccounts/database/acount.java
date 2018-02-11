@@ -31,7 +31,11 @@ public class acount extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "accountsManager";
 
     // Contacts table name
+    private static final String TABLE_ADMIN= "admin";
+
+    private static final String TABLE_EXPENSE = "expense";
     private static final String TABLE_ACCOUNTS = "accounts";
+
     private static final String TABLE_TRANSACTION = "transac";
 
     Context context;
@@ -49,26 +53,46 @@ public class acount extends SQLiteOpenHelper {
 
 
         //   _id
-        // name
+        // ad_name
         //  password
+        // cb
 
-        String q = "CREATE TABLE " + TABLE_ACCOUNTS + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT , name TEXT NOT NULL , password TEXT NOT NULL , cb VARCHAR(10));";
+        String q1 = "CREATE TABLE "+TABLE_ADMIN+" (_id INTEGER PRIMARY KEY AUTOINCREMENT,ad_name TEXT NOT NULL ,password TEXT NOT NULL , cb VARCHAR(10));" ;
 
-        // current ballence , before ballence
 
-        String q1 = "CREATE TABLE " + TABLE_TRANSACTION +"( _id INTEGER PRIMARY KEY AUTOINCREMENT , account_id INTEGER , description TEXT NOT NULL , type VARCHAR(10) , amount VARCHAR(10), nb VARCHAR(10), ob VARCHAR(10) , date VARCHAR(10), FOREIGN KEY(account_id) REFERENCES accounts(_id));";
-   //     String q2 = "CREATE TABLE "+  TABLE_Detail+"( _id INTEGER PRIMARY KEY AUTOINCREMENT , account_id INTEGER , cb VARCHAR(10) , exp VARCHAR(10) , paying VARCHAR(10) , rec VARCHAR(10) , FOREIGN KEY(account_id) REFERENCES accounts(_id));";
+        //  _id
+        //  admin_id
+        //  name
+        //  phone
+        //  pay_able
+        //  rec_able
+        String q2 = "CREATE TABLE " + TABLE_ACCOUNTS + " ( _id INTEGER PRIMARY KEY AUTOINCREMENT , admin_id INTEGER ,name TEXT NOT NULL , phone TEXT NOT NULL , pay_able VARCHAR(10), rec_able VARCHAR(10)  , FOREIGN KEY(admin_id) REFERENCES admin(_id));";
+
 
 
 
         //  _id
         //  account_id
+        //  admin_id
         //  description
         //  type
         //  amount
         //  nb
         //  ob
         //  date
+        String q3 = "CREATE TABLE " + TABLE_TRANSACTION +"( _id INTEGER PRIMARY KEY AUTOINCREMENT , account_id INTEGER, admin_id INTEGER , description TEXT NOT NULL , type VARCHAR(10) , amount VARCHAR(10), nb VARCHAR(10), ob VARCHAR(10) , date VARCHAR(10), FOREIGN KEY(account_id) REFERENCES accounts(_id),  FOREIGN KEY(admin_id) REFERENCES admin(_id));";
+
+
+
+        //  _id
+        //  admin_id
+        //  description
+        //  amount
+        //  nb
+        //  ob
+        //  date
+
+        String q4 = "CREATE TABLE " + TABLE_EXPENSE +"( _id INTEGER PRIMARY KEY AUTOINCREMENT , admin_id INTEGER , description TEXT NOT NULL , amount VARCHAR(10), nb VARCHAR(10), ob VARCHAR(10) , date VARCHAR(10), FOREIGN KEY(admin_id) REFERENCES admin(_id));";
 
 
 
@@ -76,20 +100,32 @@ public class acount extends SQLiteOpenHelper {
         //****************************************************************************************************
 
         try {
-            db.execSQL(q);
-            Log.e(TAG, " account table create ");
-            Toast.makeText(context, "contact table create ", Toast.LENGTH_LONG).show();
+            db.execSQL(q1);
+            Log.e(TAG, " admin table create ");
+            Toast.makeText(context, "admin table create ", Toast.LENGTH_LONG).show();
 
 
         } catch (SQLException e) {
-            Log.e(TAG, "account table create error    " + e);
-            Toast.makeText(context, "error ", Toast.LENGTH_LONG).show();
+            Log.e(TAG, "admin table create error    " + e);
+            Toast.makeText(context, "admin error ", Toast.LENGTH_LONG).show();
         }
 
 
 
         try {
-            db.execSQL(q1);
+            db.execSQL(q2);
+            Log.e(TAG, " account table create ");
+            Toast.makeText(context, "acoount table create ", Toast.LENGTH_LONG).show();
+
+
+        } catch (SQLException e) {
+            Log.e(TAG, "account table create error    " + e.getMessage());
+            Toast.makeText(context, "transaction tabl error "+e, Toast.LENGTH_LONG).show();
+        }
+
+
+        try {
+            db.execSQL(q3);
             Log.e(TAG, " transaction table create ");
             Toast.makeText(context, "transaction table create ", Toast.LENGTH_LONG).show();
 
@@ -98,6 +134,24 @@ public class acount extends SQLiteOpenHelper {
             Log.e(TAG, "transaction table create error    " + e.getMessage());
             Toast.makeText(context, "transaction tabl error "+e, Toast.LENGTH_LONG).show();
         }
+
+
+        try {
+            db.execSQL(q4);
+            Log.e(TAG, " expense table create ");
+            Toast.makeText(context, "expense table create ", Toast.LENGTH_LONG).show();
+
+
+        } catch (SQLException e) {
+            Log.e(TAG, "expense table create error    " + e.getMessage());
+            Toast.makeText(context, "expense tabl error "+e, Toast.LENGTH_LONG).show();
+        }
+
+
+
+
+
+
 
     }
 
@@ -111,6 +165,36 @@ public class acount extends SQLiteOpenHelper {
 
     }
 
+//---------------------------------------------------------------------------------------------------
+
+
+    public Long addAdmin(admin a) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("_id",      a.get_id()); // Contact Phone
+        values.put("ad_name",  a.getAd_name());
+        values.put("password", a.getPassword());
+        values.put("cb",       a.getCb());
+
+        // Inserting Row
+        long id = db.insert(TABLE_ADMIN, null, values);
+
+
+        db.close(); // Closing database connection
+
+        return id;
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     // --------------------------------------------------------------------------------------------
 
@@ -118,14 +202,14 @@ public class acount extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put("name", a.getpName()); // Contact Name
-        values.put("password", a.getPassword()); // Contact Phone
-        values.put("cb", a.getCurrent_ballence());
-
-
-
+        values.put("admin_id",   a.getAdmin_id()); // Contact Phone
+        values.put("name",       a.getName());
+        values.put("phone",      a.getPhone());
+        values.put("pay_able",   a.getPay_able());
+        values.put("rec_able",   a.getRec_able());
 
         // Inserting Row
+
         long id = db.insert(TABLE_ACCOUNTS, null, values);
 
 
@@ -163,21 +247,24 @@ public class acount extends SQLiteOpenHelper {
 
 //--------------------------------------------------------------------------------------------------------------
 
-    public List<class_account> getAllaccounts() {
+    public List<class_account> getAllaccounts_of_admin(String adminID) {
         List<class_account> contactList = new ArrayList<class_account>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNTS;
+        String selectQuery = "SELECT  * FROM " + TABLE_ACCOUNTS +" WHERE admin_id = '" + adminID + "' ";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
         // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
-                String account_id         = cursor.getString(0);
-                String pName              = cursor.getString(1);
-                String password           = cursor.getString(2);
-                String current_ballence   = cursor.getString(2);
-               class_account acc = new class_account(account_id, pName, password,current_ballence );
+                 String  _id         = cursor.getString(0);
+                 String  admin_id    = cursor.getString(1);
+                 String  name        = cursor.getString(2);
+                 String  phone       = cursor.getString(3);
+                 String  pay_able    = cursor.getString(4);
+                 String  rec_able    = cursor.getString(5);
+
+                class_account acc = new class_account(_id, admin_id, name,phone,pay_able,rec_able );
                 // Adding contact to list
                 contactList.add(acc);
             } while (cursor.moveToNext());
@@ -190,11 +277,61 @@ public class acount extends SQLiteOpenHelper {
 
 //-------------------------------------------------------------------------------------------------------------
 
-    public Cursor Check_account_of_user(String n, String p) {
+
+
+    public List<admin> getAlladmis() {
+        List<admin> adminList = new ArrayList<admin>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + TABLE_ADMIN;
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                String    _id       = cursor.getString(0);
+                String    ad_name   = cursor.getString(1);
+                String    password  = cursor.getString(2);
+                String    cb        = cursor.getString(3);
+
+
+                admin ad = new admin(_id, ad_name, password,cb );
+                // Adding contact to list
+                adminList.add(ad);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return adminList;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//-------------------------------------------------------------------------------------------------------------
+
+
+
+    public Cursor Check_admin(String n, String p) {
         SQLiteDatabase db = this.getWritableDatabase();
         //sqlite> SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
         // prmry key aysy run hojati ha laikin   by name search ni hota uupar show detail dekho
-        String q = "SELECT * FROM " + this.TABLE_ACCOUNTS + " WHERE name = '" + n + "' AND password = '" + p + "' ;";
+        String q = "SELECT * FROM " + this.TABLE_ADMIN + " WHERE ad_name = '" + n + "' AND password = '" + p + "' ;";
         Cursor cursor = null;
         try {
 
@@ -216,11 +353,11 @@ public class acount extends SQLiteOpenHelper {
 
 
 
-    public Cursor Account_Detail_OF(String accountID) {
+    public Cursor Admin_Detail_OF(String adminID) {
         SQLiteDatabase db = this.getWritableDatabase();
         //sqlite> SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
         // prmry key aysy run hojati ha laikin   by name search ni hota uupar show detail dekho
-        String q = "SELECT * FROM " + TABLE_ACCOUNTS + " WHERE _id = '"+accountID+"' ;";
+        String q = "SELECT * FROM " + TABLE_ADMIN + " WHERE _id = '"+adminID+"' ;";
         Cursor cursor = null;
         try {
 
@@ -257,14 +394,15 @@ public class acount extends SQLiteOpenHelper {
 
                 String id                      = cursor.getString(0);
                 String account_id              = cursor.getString(1);
-                String description             = cursor.getString(2);
-                String type                 = cursor.getString(3);
-                String amount                 = cursor.getString(4);
-                String new_b                 = cursor.getString(5);
-                String old_b                 = cursor.getString(6);
-                String date                 = cursor.getString(7);
+                String admin_id                = cursor.getString(2);
+                String description             = cursor.getString(3);
+                String type                    = cursor.getString(4);
+                String amount                  = cursor.getString(5);
+                String new_b                   = cursor.getString(6);
+                String old_b                   = cursor.getString(7);
+                String date                    = cursor.getString(8);
 
-                class_transaction tr = new class_transaction(id, account_id, description, type, amount, new_b, old_b, date);
+                class_transaction tr = new class_transaction(id, account_id, admin_id, description, type, amount, new_b, old_b, date);
                     transactionList.add(tr);
 
             } while (cursor.moveToNext());
@@ -285,7 +423,7 @@ public class acount extends SQLiteOpenHelper {
 
 
 
-    public List<class_transaction>  Today_Transaction_Detail_OF_Account(String accountID) {
+    public List<class_transaction>  Today_Transaction_Detail_OF_Admin(String adminID) {
 
 
         List<class_transaction> transactionList = new ArrayList<class_transaction>();
@@ -294,27 +432,29 @@ public class acount extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         //sqlite> SELECT * FROM COMPANY WHERE AGE >= 25 AND SALARY >= 65000;
         // prmry key aysy run hojati ha laikin   by name search ni hota uupar show detail dekho
-        String q = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE account_id = '"+accountID+"' ;";
+        String q = "SELECT * FROM " + TABLE_TRANSACTION + " WHERE admin_id = '"+adminID+"' ;";
         Cursor cursor = db.rawQuery(q, null);
 
         if (cursor.moveToFirst()) {
             do {
 
+
                 String id                      = cursor.getString(0);
                 String account_id              = cursor.getString(1);
-                String description             = cursor.getString(2);
-                String type                 = cursor.getString(3);
-                String amount                 = cursor.getString(4);
-                String new_b                 = cursor.getString(5);
-                String old_b                 = cursor.getString(6);
-                String date                 = cursor.getString(7);
+                String admin_id                = cursor.getString(2);
+                String description             = cursor.getString(3);
+                String type                    = cursor.getString(4);
+                String amount                  = cursor.getString(5);
+                String new_b                   = cursor.getString(6);
+                String old_b                   = cursor.getString(7);
+                String date                    = cursor.getString(8);
 
 
                 Log.e("date compare" , getDateFromMili(date) +"   ?  "   +getDateFromComputer() );
 
                 if (getDateFromMili(date).equals(getDateFromComputer())) {
                     Log.e("date compare" , "   add ok  " );
-                    class_transaction tr = new class_transaction(id, account_id, description, type, amount, new_b, old_b, date);
+                    class_transaction tr = new class_transaction(id, account_id,admin_id, description, type, amount, new_b, old_b, date);
                     transactionList.add(tr);
                 }
 
@@ -329,20 +469,50 @@ public class acount extends SQLiteOpenHelper {
 
 
 
-   public long updateAcount_ballence(String Ac_id, String cb ){
+   public long updateAdmin_current_ballence(String Admin_id, String cb ){
 
 
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("cb", cb);
 
-        long id =   db.update(TABLE_ACCOUNTS, contentValues,"_id = "+ Ac_id , null);
+        long id =   db.update(TABLE_ADMIN, contentValues,"_id = "+ Admin_id , null);
 
         db.close(); // Closing database connection
 
         return id;
 
     }
+
+
+    public long updateAcount_payaable_recable(String accountID, String newAmmount , String type ){
+
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+
+
+
+        if (type.equals("pay")) {
+
+            contentValues.put("pay_able",   newAmmount);
+        } else if (type.equals("Recieve")) {
+            contentValues.put("rec_able",   newAmmount);
+        }
+
+
+        long id =   db.update(TABLE_ACCOUNTS, contentValues,"_id = "+ accountID , null);
+
+        db.close(); // Closing database connection
+
+        return id;
+
+    }
+
+
+
+
+
 
 
 

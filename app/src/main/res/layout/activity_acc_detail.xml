@@ -22,105 +22,350 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <LinearLayout
 
-        android:layout_margin="1dp"
-        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
 
+        <!-- ***************************************************************** -->
 
-        <TextView
-            android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
+        <LinearLayout
 
-            android:gravity=""
-            android:textColor="@color/colorAccent"
-            android:id="@+id/description"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Description" />
+            android:layout_marginTop="20dp"
+
+
+            android:orientation="vertical"
+            android:paddingRight="20dp">
+
+
+            <ScrollView
+
+                android:layout_width="match_parent"
+                android:layout_height="130dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="10dp">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="ID"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_id"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="id"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="name"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_name"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="name"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="phone"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_phone"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="phone"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Left Payable"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_payable"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="pay"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Left Reciecable"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_recieveable"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="rec"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
+
+
+                    </LinearLayout>
 
 
 
-        <TextView
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-
-            android:id="@+id/old_b"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Old ballence" />
-
-
-        <TextView
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-
-            android:id="@+id/amount"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Amount" />
-
-
-        <TextView
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
-
-            android:id="@+id/type"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Type" />
 
 
 
 
-        <TextView
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
 
-            android:id="@+id/new_b"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Current Ballence" />
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cash Flow"
+
+                            />
+
+                        <TextView
+                            android:id="@+id/tv_cashFlow"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+
+                            android:layout_marginLeft="2dp"
+                            android:layout_marginRight="2dp"
+                            android:layout_weight="1"
+                            android:text="rec"
+                            android:textColor="@color/colorAccent"
+                            android:textStyle="bold" />
 
 
-        <TextView
-            android:textColor="@color/colorAccent"
-android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
+                    </LinearLayout>
 
-            android:id="@+id/date"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Date" />
+
+
+
+
+
+                </LinearLayout>
+
+            </ScrollView>
+
+
+            <!-- **************************************************************************** -->
+
+
+            <Button
+                android:id="@+id/btnTr"
+
+                android:layout_width="wrap_content"
+                android:layout_height="45dp"
+                android:layout_gravity="end"
+                android:text="new Transaction"
+                android:theme="@style/MyButton" />
+
+
+        </LinearLayout>
+
+
+        <!-- **************************************************************************** -->
+
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            >
+
+
+
+            <LinearLayout
+                android:paddingTop="5dp"
+                android:paddingBottom="5dp"
+                android:background="@color/colorPrimary"
+                android:theme="@style/MyButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+
+                <TextView
+                    android:id="@+id/description"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:gravity=""
+                    android:text="Description"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/old_b"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:text="Old ballence"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:text="Amount"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/type"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:text="Type"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/new_b"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:text="Current Ballence"
+                    android:textStyle="bold" />
+
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="1"
+                    android:text="Date"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <android.support.v7.widget.RecyclerView
+
+
+                android:id="@+id/detailTransRecyc"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="5dp">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </LinearLayout>
+
+
+        <!-- ************************************************************************************* -->
+
+
     </LinearLayout>
-
-<android.support.v7.widget.RecyclerView
-
-    android:id="@+id/detailTransRecyc"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-</android.support.v7.widget.RecyclerView>
-
 
 
 </LinearLayout>

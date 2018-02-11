@@ -6,51 +6,44 @@ package techsol.wajeeh.smartaccounts.models;
 
 public class class_account {
 
-    String account_id;
-    String pName;
-    String password;
-
-    private String current_ballence;
-
-
-
+    String  _id         ;
+    String  admin_id    ;
+    String  name        ;
+    String  phone       ;
+    String  pay_able    ;
+    String  rec_able    ;
 
 
-
-
-    public class_account(String account_id, String pName, String password,String current_ballence) {
-        this.account_id = account_id;
-        this.pName = pName;
-        this.password = password;
-
-
-
-        this.current_ballence = current_ballence;
-
-
-
+    public class_account(String _id, String admin_id, String name, String phone, String pay_able, String rec_able) {
+        this._id = _id;
+        this.admin_id = admin_id;
+        this.name = name;
+        this.phone = phone;
+        this.pay_able = pay_able;
+        this.rec_able = rec_able;
     }
 
-
-    public String getAccount_id() {
-        return account_id;
+    public String get_id() {
+        return _id;
     }
 
-    public String getpName() {
-        return pName;
+    public String getAdmin_id() {
+        return admin_id;
     }
 
-    public String getPassword() {
-        return password;
+    public String getName() {
+        return name;
     }
 
-
-
-
-    public String getCurrent_ballence() {
-        return current_ballence;
+    public String getPhone() {
+        return phone;
     }
 
+    public String getPay_able() {
+        return pay_able;
+    }
 
-
+    public String getRec_able() {
+        return rec_able;
+    }
 }

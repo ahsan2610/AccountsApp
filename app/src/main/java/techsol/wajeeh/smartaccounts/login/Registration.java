@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import techsol.wajeeh.smartaccounts.R;
 import techsol.wajeeh.smartaccounts.database.acount;
-import techsol.wajeeh.smartaccounts.models.class_account;
+import techsol.wajeeh.smartaccounts.models.*;
 
 public class Registration extends AppCompatActivity {
 
@@ -59,12 +59,13 @@ public class Registration extends AppCompatActivity {
               p=   password.getText().toString();
               b=  openB.getText().toString();
 
-               Long id =  db.addAccount(new class_account("1",n, p,b));
+             Long id =  db.addAdmin(new admin("1",n, p,b));
                 if (id < 0)
                     Toast.makeText(context, "error acount add", Toast.LENGTH_SHORT).show();
                 else {
                     Toast.makeText(context, "ok acount add", Toast.LENGTH_SHORT).show();
 
+                    finish();
                 }
 
 
